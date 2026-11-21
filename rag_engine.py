@@ -3,7 +3,7 @@ import numpy as np
 from groq import Groq
 from pypdf import PdfReader
 from sentence_transformers import SentenceTransformer
-from pathlib import Path
+from pathlib import Path    #inside my folder only all file there so this line
 
 #load pdfs
 def load_pdf (pdf_path):
@@ -38,10 +38,10 @@ def build_vectors (chunks, model_name = "all-MiniLM-L6-v2"):     #all-mini its i
   return index, embed_model
 
 #call loadpdf, chunk, embedding
-def load_knowledge_base(pdf_path="college_docs"):
+def load_base (pdf_path = "ccollege_docs"):
   chunks = []
   for pdf in Path(pdf_path).glob("*.pdf"):
-    full_text = load_pdf(pdf)
+    full_text = load_pdf(pdf)     #every time load the file and add the chunks 
     chunks.extend(create_chunks(full_text))
   index, embed_model = build_vectors(chunks)
   return index, embed_model, chunks
@@ -68,7 +68,7 @@ def ask_rag (question, embed_model, chunks, index, api_key, num_chunks =3, model
     raise ValueError("API key missing")
   background = retrive_content(question, embed_model, chunks, index, num_chunks=3)
   prompt = """you are an professional ai assistant.
-  Answer user questin using only document background below
+  Answer user question using only document background below
   Do not invent or assume facts.
   If information not available , simply say information missing.
   Document Background : """ + background + "user question" + question + "answer:"
